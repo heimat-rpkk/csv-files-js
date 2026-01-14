@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSV-tiedoston luku</title>
+  </head>
+  <body>
+    <button onclick="readCSV()">Lue CSV-tiedosto</button>
+
+    <script>
+      async function readCSV() {
+        try {
+          const response = await fetch("data/taulukko.csv");
+
+          if (!response.ok) {
+            throw new Error("HTTP-virhe: " + response.status);
+          }
+
+          const text = await response.text();
+          console.log("Raaka CSV:");
+          console.log(text);
+
+          // Pilkotaan CSV
+          // Poistetaan \r-merkit ja jaetaan riveihin
+          const rows = text.replace(/\r/g, "").trim().split("\n");
+          // Jaetaan rivi taulukoksi
+          const data = rows.map((row) => row.split(","));
+
+          console.log("Taulukkona:");
+          console.log(data);
+
+          // Otsikot
+          const headers = data[0];
+
+          // Muunnetaan objektitaulukoksi
+          const values = data.slice(1).map((row) => {
+            let obj = {};
+            headers.forEach((header, index) => {
+              obj[header] = row[index];
+            });
+            return obj;
+          });
+
+          console.log("Objekteina:");
+          console.log(values);
+        } catch (error) {
+          console.error("Virhe CSV:n lukemisessa:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
