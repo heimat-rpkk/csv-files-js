@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Read TSV-file</title>
+  </head>
+  <body>
+    <button onclick="readTXT()">Lue sanalista</button>
+
+    <script>
+      async function readTXT() {
+        try {
+          // Jos tiedosto on paikallinen projektikansiossa
+          const response = await fetch("data/nykysuomensanalista2024.txt");
+
+          if (!response.ok) throw new Error("HTTP-virhe: " + response.status);
+
+          const text = await response.text();
+
+          // Rivien pilkkominen, huomioi \r\n tai \n
+          const rows = text.trim().split(/\r?\n/);
+
+          // Muutetaan taulukoksi, sarakkeet erotellaan tabilla
+          const data = rows.map((row) => row.split("\t"));
+
+          // Otsikkorivi
+          const headers = data[0];
+
+          // Muutetaan objektitaulukoksi
+          const values = data.slice(1).map((row) => {
+            let obj = {};
+            headers.forEach((header, index) => {
+              obj[header] = row[index] ? row[index].trim() : ""; // trim ja tyhjät kentät
+            });
+            return obj;
+          });
+
+          console.log(values);
+        } catch (error) {
+          console.error("Virhe TXT:n lukemisessa:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
