@@ -12,7 +12,7 @@
       async function readTXT() {
         try {
           // Jos tiedosto on paikallinen projektikansiossa
-          const response = await fetch("data/nykysuomensanalista2024.txt");
+          const response = await fetch("nykysuomensanalista2024.txt");
 
           if (!response.ok) throw new Error("HTTP-virhe: " + response.status);
 
