@@ -11,7 +11,7 @@
     <script>
       async function readCSV() {
         try {
-          const response = await fetch("data/taulukko.csv");
+          const response = await fetch("taulukko.csv");
 
           if (!response.ok) {
             throw new Error("HTTP-virhe: " + response.status);
